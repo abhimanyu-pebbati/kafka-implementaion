@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.queuing.kafka.consumer.Consumer;
+import com.queuing.kafka.consumer.AbstractConsumer;
 import com.queuing.kafka.service.KafkaService;
-import com.queuing.kafka.topic.Topic;
+import com.queuing.kafka.topic.AbstractTopic;
 
 @RestController
 public class KafkaController {
@@ -17,22 +17,22 @@ public class KafkaController {
 	KafkaService kafkaService;
 
 	@RequestMapping(method = RequestMethod.POST, value = "/topic")
-	public Topic addTopic(@RequestParam String topicName) {
+	public AbstractTopic addTopic(@RequestParam String topicName) {
 		return kafkaService.addTopic(topicName);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/consumer")
-	public Consumer addConsumer(@RequestParam String consumerName) {
+	public AbstractConsumer addConsumer(@RequestParam String consumerName) {
 		return kafkaService.addConsumer(consumerName);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/subscribe-consumer")
-	public void subscribeConsumer(@RequestParam String topicName, String consumerName) {
+	public void subscribeConsumer(@RequestParam String topicName, @RequestParam String consumerName) {
 		kafkaService.subscribeConsumer(topicName, consumerName);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/topic-message")
-	public void pushMessage(@RequestParam String topicName, String message) {
+	public void pushMessage(@RequestParam String topicName, @RequestParam String message) {
 		kafkaService.pushMessage(topicName, message);
 	}
 

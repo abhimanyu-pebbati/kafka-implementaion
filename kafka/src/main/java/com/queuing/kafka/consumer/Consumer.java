@@ -1,15 +1,14 @@
 package com.queuing.kafka.consumer;
 
-public abstract class Consumer {
-	private final String consumerName;
+public class Consumer extends AbstractConsumer {
 
-	Consumer(String consumerName) {
-		this.consumerName = consumerName;
+	public Consumer(String consumerName) {
+		super(consumerName);
 	}
 
-	public abstract void notify(String message);
-	
-	public String getConsumerName() {
-		return consumerName;
+	@Override
+	public void notify(String message) {
+		System.out.println("Message '" + message + "' consumed by '" + this.getConsumerName() + "'.");
 	}
+
 }

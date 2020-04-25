@@ -1,13 +1,18 @@
 package com.queuing.kafka.factory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.queuing.kafka.consumer.AbstractConsumer;
 import com.queuing.kafka.consumer.Consumer;
-import com.queuing.kafka.consumer.ConsumerImpl;
+import com.queuing.kafka.exceptionhandling.exception.InvalidConsumerException;
 import com.queuing.kafka.model.ConsumerModel;
 import com.queuing.kafka.util.StringFunctions;
 
 public class ConsumerFactory {
 	private static ConsumerFactory instance;
 	private ConsumerModel consumerModel;
+	private Logger logger = LoggerFactory.getLogger(ConsumerFactory.class);
 
 	private ConsumerFactory() {
 		consumerModel = ConsumerModel.getInstance();
@@ -19,16 +24,18 @@ public class ConsumerFactory {
 		return instance;
 	}
 
-	public Consumer createConsumer(String consumerName) {
+	public AbstractConsumer createConsumer(String consumerName) {
 		if (StringFunctions.isEmpty(consumerName)) {
-			System.out.println("Consumer name cannot be empty.");
-			return null;
+			String err = "Consumer name cannot be empty.";
+			logger.error(err);
+			throw new InvalidConsumerException(err);
 		} else if (consumerModel.consumerExists(consumerName)) {
-			System.out.println("Consumer '" + consumerName + "' already exists.");
-			return null;
+			String err = "Consumer '" + consumerName + "' already exists.";
+			logger.error(err);
+			throw new InvalidConsumerException(err);
 		}
 
-		Consumer consumer = new ConsumerImpl(consumerName);
+		AbstractConsumer consumer = new Consumer(consumerName);
 		consumerModel.addConsumer(consumer);
 
 		return consumer;

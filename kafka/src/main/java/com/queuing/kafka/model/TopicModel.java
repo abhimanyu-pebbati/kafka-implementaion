@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.queuing.kafka.topic.Topic;
+import com.queuing.kafka.exceptionhandling.exception.InvalidTopicException;
+import com.queuing.kafka.topic.AbstractTopic;
 
 public class TopicModel {
 	private static TopicModel instance;
-	private Map<String, Topic> topics;
+	private Map<String, AbstractTopic> topics;
 
 	private TopicModel() {
-		this.topics = new HashMap<String, Topic>();
+		this.topics = new HashMap<String, AbstractTopic>();
 	}
 
 	public static TopicModel getInstance() {
@@ -25,15 +26,17 @@ public class TopicModel {
 		return topics.containsKey(topicName);
 	}
 
-	public void addTopic(Topic topic) {
+	public void addTopic(AbstractTopic topic) {
 		topics.put(topic.getTopicName(), topic);
 	}
 
-	public Topic getTopic(String topicName) {
+	public AbstractTopic getTopic(String topicName) {
+		if (!this.topicExists(topicName))
+			throw new InvalidTopicException("Topic '" + topicName + "' does not exists.");
 		return topics.get(topicName);
 	}
 
-	public List<Topic> getTopicsList() {
+	public List<AbstractTopic> getTopicsList() {
 		return topics.values().stream().collect(Collectors.toList());
 	}
 

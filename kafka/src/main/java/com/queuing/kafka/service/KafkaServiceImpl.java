@@ -5,12 +5,12 @@ import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
-import com.queuing.kafka.consumer.Consumer;
+import com.queuing.kafka.consumer.AbstractConsumer;
 import com.queuing.kafka.factory.ConsumerFactory;
 import com.queuing.kafka.factory.TopicFactory;
 import com.queuing.kafka.model.ConsumerModel;
 import com.queuing.kafka.model.TopicModel;
-import com.queuing.kafka.topic.Topic;
+import com.queuing.kafka.topic.AbstractTopic;
 
 @Service
 public class KafkaServiceImpl implements KafkaService {
@@ -30,31 +30,31 @@ public class KafkaServiceImpl implements KafkaService {
 	}
 
 	@Override
-	public Topic addTopic(String topicName) {
+	public AbstractTopic addTopic(String topicName) {
 		return topicFactory.createTopic(topicName);
 	}
 
 	@Override
-	public Consumer addConsumer(String consumerName) {
+	public AbstractConsumer addConsumer(String consumerName) {
 		return consumerFactory.createConsumer(consumerName);
 	}
 
 	@Override
 	public void subscribeConsumer(String topicName, String consumerName) {
-		Topic topic = topicModel.getTopic(topicName);
-		Consumer consumer = consumerModel.getConsumer(consumerName);
+		AbstractTopic topic = topicModel.getTopic(topicName);
+		AbstractConsumer consumer = consumerModel.getConsumer(consumerName);
 		topic.subscribeConsumer(consumer);
 	}
 
 	@Override
 	public void pushMessage(String topicName, String message) {
-		Topic topic = topicModel.getTopic(topicName);
+		AbstractTopic topic = topicModel.getTopic(topicName);
 		topic.pushMessage(message);
 	}
 
 	@Override
 	public void pushRandomMessage(int messageCount) {
-		List<Topic> topics = topicModel.getTopicsList();
+		List<AbstractTopic> topics = topicModel.getTopicsList();
 		Random random = new Random();
 		Thread thread;
 		for (int i = 1; i <= messageCount; i++) {

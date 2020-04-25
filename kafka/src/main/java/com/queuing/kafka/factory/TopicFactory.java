@@ -1,13 +1,18 @@
 package com.queuing.kafka.factory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.queuing.kafka.exceptionhandling.exception.InvalidTopicException;
 import com.queuing.kafka.model.TopicModel;
+import com.queuing.kafka.topic.AbstractTopic;
 import com.queuing.kafka.topic.Topic;
-import com.queuing.kafka.topic.TopicImpl;
 import com.queuing.kafka.util.StringFunctions;
 
 public class TopicFactory {
 	private static TopicFactory instance;
 	private TopicModel topicModel;
+	private Logger logger = LoggerFactory.getLogger(TopicFactory.class);
 
 	private TopicFactory() {
 		topicModel = TopicModel.getInstance();
@@ -19,16 +24,18 @@ public class TopicFactory {
 		return instance;
 	}
 
-	public Topic createTopic(String topicName) {
+	public AbstractTopic createTopic(String topicName) {
 		if (StringFunctions.isEmpty(topicName)) {
-			System.out.println("Topic name cannot be empty.");
-			return null;
+			String err = "Topic name cannot be empty.";
+			logger.error(err);
+			throw new InvalidTopicException(err);
 		} else if (topicModel.topicExists(topicName)) {
-			System.out.println("Topic '" + topicName + "' already exists.");
-			return null;
+			String err = "Topic '" + topicName + "' already exists.";
+			logger.error(err);
+			throw new InvalidTopicException(err);
 		}
 
-		Topic topic = new TopicImpl(topicName);
+		AbstractTopic topic = new Topic(topicName);
 		topicModel.addTopic(topic);
 
 		return topic;
