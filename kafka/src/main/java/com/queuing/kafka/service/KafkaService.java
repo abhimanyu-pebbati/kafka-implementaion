@@ -1,13 +1,13 @@
 package com.queuing.kafka.service;
 
-import com.queuing.kafka.consumer.Consumer;
-import com.queuing.kafka.topic.Topic;
+import com.queuing.kafka.consumer.AbstractConsumer;
+import com.queuing.kafka.topic.AbstractTopic;
 
 public interface KafkaService {
 
-	public Topic addTopic(String topicName);
+	public AbstractTopic addTopic(String topicName);
 
-	public Consumer addConsumer(String topicName);
+	public AbstractConsumer addConsumer(String topicName);
 
 	public void subscribeConsumer(String topicName, String consumerName);
 	

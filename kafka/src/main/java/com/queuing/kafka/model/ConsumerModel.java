@@ -3,14 +3,14 @@ package com.queuing.kafka.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.queuing.kafka.consumer.Consumer;
+import com.queuing.kafka.consumer.AbstractConsumer;
 
 public class ConsumerModel {
 	private static ConsumerModel instance;
-	private Map<String, Consumer> consumers;
+	private Map<String, AbstractConsumer> consumers;
 
 	private ConsumerModel() {
-		this.consumers = new HashMap<String, Consumer>();
+		this.consumers = new HashMap<String, AbstractConsumer>();
 	}
 
 	public static ConsumerModel getInstance() {
@@ -23,11 +23,11 @@ public class ConsumerModel {
 		return consumers.containsKey(consumerName);
 	}
 
-	public void addConsumer(Consumer consumer) {
+	public void addConsumer(AbstractConsumer consumer) {
 		consumers.put(consumer.getConsumerName(), consumer);
 	}
 
-	public Consumer getConsumer(String consumerName) {
+	public AbstractConsumer getConsumer(String consumerName) {
 		return consumers.get(consumerName);
 	}
 
